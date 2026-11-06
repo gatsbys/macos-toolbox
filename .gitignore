@@ -1,0 +1,13 @@
+.DS_Store
+.build/
+work/
+outputs/
+*.xcuserstate
+xcuserdata/
+Config/LocalSigning.xcconfig
+/.swiftpm/
+/*.app/
+*.log
+*.zip
+/VALIDACION.md
+/docs/plans/
