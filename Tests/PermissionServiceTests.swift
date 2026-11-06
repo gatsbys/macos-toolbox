@@ -64,7 +64,14 @@ private final class PermissionProbe {
     let probe = PermissionProbe()
     let service = PermissionService(client: probe.client)
     service.request()
-    try await Task.sleep(for: .milliseconds(800))
+
+    let clock = ContinuousClock()
+    let deadline = clock.now.advanced(by: .seconds(5))
+    while service.isRequestInFlight && clock.now < deadline {
+        try await Task.sleep(for: .milliseconds(25))
+    }
+    try #require(!service.isRequestInFlight, "The permission request cooldown did not finish.")
+
     service.request()
     #expect(probe.prompts == 1)
     #expect(probe.settingsOpened == 1)
